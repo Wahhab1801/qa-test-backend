@@ -1,0 +1,96 @@
+{
+    "info": {
+      "name": "Remove Shift Tests",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Remove Shift - With Token",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{authToken}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8000/api/shift/removeShift?id={{validShiftId}}",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8000",
+            "path": [
+              "api",
+              "shift",
+              "removeShift"
+            ],
+            "query": [
+              {
+                "key": "id",
+                "value": "{{validShiftId}}"
+              }
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function () {",
+                "    pm.response.to.have.status(200);",
+                "});"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Remove Shift - Simulate Server Error",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{authToken}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8000/api/shift/removeShift?id=invalidID",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8000",
+            "path": [
+              "api",
+              "shift",
+              "removeShift"
+            ],
+            "query": [
+              {
+                "key": "id",
+                "value": "invalidID"
+              }
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Expect 500 for server error or invalid deletion\", function () {",
+                "    pm.expect(pm.response.code).to.eql(500);",
+                "});"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }

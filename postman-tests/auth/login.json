@@ -1,0 +1,96 @@
+{
+  "info": {
+      "name": "Login Test Collection",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+      {
+          "name": "User Login - Valid",
+          "request": {
+              "method": "POST",
+              "header": [
+                  {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                  }
+              ],
+              "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"StrongPass123!\"\n}"
+              },
+              "url": {
+                  "raw": "http://localhost:8000/api/user/login",
+                  "protocol": "http",
+                  "host": [
+                      "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                      "api",
+                      "user",
+                      "login"
+                  ]
+              }
+          },
+          "event": [
+              {
+                  "listen": "test",
+                  "script": {
+                      "type": "text/javascript",
+                      "exec": [
+                          "pm.test(\"Login successful\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "pm.test(\"Token is present\", function () {",
+                          "    var jsonData = pm.response.json();",
+                          "    pm.expect(jsonData).to.have.property(\"token\");",
+                          "});"
+                      ]
+                  }
+              }
+          ]
+      },
+      {
+          "name": "User Login - Invalid Password",
+          "request": {
+              "method": "POST",
+              "header": [
+                  {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                  }
+              ],
+              "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"testuser@example.com\",\n    \"password\": \"WrongPassword\"\n}"
+              },
+              "url": {
+                  "raw": "http://localhost:8000/api/user/login",
+                  "protocol": "http",
+                  "host": [
+                      "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                      "api",
+                      "user",
+                      "login"
+                  ]
+              }
+          },
+          "event": [
+              {
+                  "listen": "test",
+                  "script": {
+                      "type": "text/javascript",
+                      "exec": [
+                          "pm.test(\"Should return 401 for wrong password\", function () {",
+                          "    pm.expect(pm.response.code === 400 || pm.response.code === 401).to.be.true;",
+                          "});"
+                      ]
+                  }
+              }
+          ]
+      }
+  ]
+}

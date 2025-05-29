@@ -1,0 +1,130 @@
+{
+    "info": {
+      "name": "Get Shift Tests",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Get Shift - With Token",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Authorization",
+              "value": "Bearer {{authToken}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8000/api/shift/getShift",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8000",
+            "path": [
+              "api",
+              "shift",
+              "getShift"
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function () {",
+                "    pm.response.to.have.status(200);",
+                "});"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Get Shift - Without Token",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8000/api/shift/getShift",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8000",
+            "path": [
+              "api",
+              "shift",
+              "getShift"
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Should return 401 for missing token\", function () {",
+                "    pm.expect(pm.response.code).to.eql(401);",
+                "});"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Get Shift - Simulate Server Error",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Authorization",
+              "value": "Bearer {{invalidToken}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8000/api/shift/getShift",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8000",
+            "path": [
+              "api",
+              "shift",
+              "getShift"
+            ]
+          }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Should return 500 for internal server error\", function () {",
+                "    pm.expect(pm.response.code).to.eql(500);",
+                "});"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }

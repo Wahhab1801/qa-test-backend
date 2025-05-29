@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "Add Shift Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Add Shift - With Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Night Shift\",\n    \"description\": \"10pm to 6am in Zone A\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/shift/addShift",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "shift",
+            "addShift"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Add Shift - Without Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Night Shift\",\n    \"description\": \"10pm to 6am in Zone A\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/shift/addShift",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "shift",
+            "addShift"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Should return 401 or 403 for missing token\", function () {",
+              "    pm.expect(pm.response.code === 401 || pm.response.code === 403).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Add Shift - Simulate Server Error (Invalid Payload)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": null,\n    \"description\": \"This may cause DB error if null is not allowed\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/shift/addShift",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "shift",
+            "addShift"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Expect 500 error for invalid server-side handling\", function () {",
+              "    pm.expect(pm.response.code).to.eql(500);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
